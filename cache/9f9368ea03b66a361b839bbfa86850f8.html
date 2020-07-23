@@ -1,0 +1,500 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <meta charset="utf-8">
+   <meta name="title" content="Aras Title">
+   <meta name="description" content="Uluslar Arasi Nakliyat">
+   <meta name="keywords" content="Nakliyat, Tasima, Tir, Hizmet, Nakliye, Tasinma">
+   <meta name="author" content="Aras Nakliyat TIC AS">
+   <meta name="owner" content="Aras Nakliyat TIC AS">
+   <meta name="copyright" content="2020">
+   <title>Aras Nakliyat</title>
+   <!-- Fontlar -->
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800|Montserrat:300,400,700" rel="stylesheet">
+   <!-- Bootstrap stil dosyası -->
+   <link href="http://localhost:8080/project/kurumsalsite/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+   <!-- işimize yarayacak diğer kütüphane css dosyalarımız -->
+   <link href="http://localhost:8080/project/kurumsalsite/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+   <link href="http://localhost:8080/project/kurumsalsite/lib/animate/animate.min.css" rel="stylesheet">
+   <link href="http://localhost:8080/project/kurumsalsite/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+   <link href="http://localhost:8080/project/kurumsalsite/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+   <link href="http://localhost:8080/project/kurumsalsite/lib/magnific-popup/magnific-popup.css" rel="stylesheet">
+   <link href="http://localhost:8080/project/kurumsalsite/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+   <!-- bizim stil dosyamız -->
+   <link href="http://localhost:8080/project/kurumsalsite/css/style.css" rel="stylesheet">
+   <!-- Kütüphaneler -->
+   <script src="http://localhost:8080/project/kurumsalsite/lib/jquery/jquery.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/jquery/jquery-migrate.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/easing/easing.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/superfish/hoverIntent.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/superfish/superfish.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/wow/wow.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/owlcarousel/owl.carousel.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/magnific-popup/magnific-popup.min.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/lib/sticky/sticky.js"></script>
+   <script src="http://localhost:8080/project/kurumsalsite/js/main.js"></script>
+   <script type="text/javascript" src="http://localhost:8080/project/kurumsalsite/js/jquery.js"></script>
+   <script type="text/javascript" src="http://localhost:8080/project/kurumsalsite/js/jquery.vticker-min.js"></script>
+<script>
+   $(document).ready(function(e){
+   // v tcker
+      $('#news-container1').vTicker({
+         speed: 700,
+         pause: 4000,
+         animation: 'fade',
+         mousePause: false,
+         showItems: 1
+      });
+   // v tcker
+   // MAIL
+      $('#gonderbtn').click(function()
+      {
+         var error = false;
+         var form = $('#mailform').find('.form-group');
+
+         form.children('input').each(function()
+         {
+            var i = $(this);
+            i.css('border-color','');
+
+            if(i.val() == ''){
+               i.css('border-color','red');
+               $('#mesajsonuc').text('Lutfen Tum Alanlari Doldurunuz..');
+               error = true;
+            }else{
+               $('#mesajsonuc').text('');
+               error = false;
+            }
+         })
+
+         var textarea = form.children('textarea');
+
+         if(textarea.val() == ''){
+            textarea.css('border-color','red');
+            $('#mesajsonuc').text('Lutfen Tum Alanlari Doldurunuz..');
+            error = true;
+         }else{
+            $('#mesajsonuc').text('');
+            error = false;
+         }
+
+         if(!error){
+            $.ajax({
+               type: "POST",
+               url:  "http://localhost:8080/project/kurumsalsite/lib/mail/gonder.php",
+               data:$("#mailform").serialize(),
+               success: function(donen){
+                  $("#mailform").trigger("reset");
+                  $("#formtutucu").fadeOut(500);
+                  $("#mesajsonuc").html(donen);
+               }
+            })
+         }
+      })  
+   // MAIL
+   // BULTEN
+      $('#bultensonuc').hide();
+      $('#bultenbtn').click(function(){
+         $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/project/kurumsalsite/lib/islem.php?islem=islembulten',
+            data: $('#bultenform').serialize(),
+            success: function(results){
+               $('#bultenform').trigger('reset');
+               $('#bultentutucu').fadeOut(500);
+               $('#bultensonuc').html(results).fadeIn();
+            }
+         })
+      })
+   // BULTEN
+   })
+</script>
+</head>
+<body id="body">
+<!-- topbar -->
+   <section id="topbar" class="d-none d-lg-block">
+      <div class="container clearfix">
+         <div class="contact-info float-left">
+            <i class="fa fa-envelope-o"></i><a href="mailto:udemy@mail.com">udemy@mail.com</a>
+            <i class="fa fa-phone"></i>+48 888 999 777     
+         </div>    
+         <div class="social-links float-right">    
+            <a href="https://www.twitter.com" class="twitter"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.facebook.com" class="facebook"><i class="fa fa-facebook"></i></a>
+            <a href="https://www.instagram.com" class="instagram"><i class="fa fa-instagram"></i></a> 
+
+            <a href="tr" class="facebook">TR</a>
+            <a href="en" class="facebook">EN</a> 
+            <a href="pl" class="facebook">PL</a>
+         </div>
+      </div>
+   </section> 
+<!-- topbar -->
+<!-- header -->
+   <header id="header">
+      <div class="container">
+         <div id="logo" class="pull-left">
+            <h1><a href="#body" class="scrollto">Aras <span>Nakliyat</span></a></h1>
+         </div>
+         <nav id="nav-menu-container">
+         <ul class="nav-menu">        
+         
+         <li class='menu-active'><a href='#body'>Anasayfa</a></li><li class='menu-active'><a href='#hakkimizda'>Hakkimizda</a></li><li class='menu-active'><a href='#hizmetler'>Hizmetlerimiz</a></li><li class='menu-active'><a href='#filo'>Filomuz</a></li><li class='menu-active'><a href='#videolar'>Videolar</a></li><li class='menu-active'><a href='#iletisim'>Iletisim</a></li>         
+         </ul>
+         </nav>
+      </div>
+   </header>
+<!-- header -->
+<!-- intro -->
+   <section id="intro">
+      <div class="intro-content">
+         <h2>Guvenle Tasiyoruz <br> Tasimacilikta Dev</h2>
+      </div>
+      <div id="intro-carousel" class="owl-carousel">
+         <div class="item" style="background-image:url(http://localhost:8080/project/kurumsalsite/img/carousel/1.jpg);"></div><div class="item" style="background-image:url(http://localhost:8080/project/kurumsalsite/img/carousel/2.jpg);"></div><div class="item" style="background-image:url(http://localhost:8080/project/kurumsalsite/img/carousel/3.jpg);"></div><div class="item" style="background-image:url(http://localhost:8080/project/kurumsalsite/img/carousel/4.jpg);"></div><div class="item" style="background-image:url(http://localhost:8080/project/kurumsalsite/img/carousel/5.jpg);"></div>      </div>
+   </section>
+<!-- intro -->
+<!-- main -->
+   <main id="main">
+<!-- BİZDEN HABERLER BÖLÜMÜ -->
+   
+               <div class="container wow fadeInUp">
+                  <div class="row mt-2 pt-3  border-secondary  border-bottom" >
+                     <div class="col-lg-3 col-md-3 text-right"><h5>Bizden Haberler: </h5></div>
+                     <div class="col-lg-9 col-md-9 text-info text-left" id="news-container1">
+                        <ul style="list-style-type:none;"><li>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz.  | 2020-07-14 14:29:25</li><li>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. | 2020-07-13 18:33:07</li><li>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. | 2020-07-13 18:33:07</li><li>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. | 2020-07-13 18:45:12</li><li>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. | 2020-07-13 18:45:48</li><li>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. | 2020-07-13 18:33:07</li></ul>
+                     </div>
+                  </div>
+               </div>
+                   
+<!-- BİZDEN HABERLER BÖLÜMÜ -->
+<!-- BOLUMLER -->
+   
+               <section id="hakkimizda" class="wow fadeInUp">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-lg-6 hakkimizda-img">
+                           <img src="http://localhost:8080/project/kurumsalsite/img/hakkimiz.jpg"  alt="hakkimiz.jpg"/>
+                        </div>
+                        <div class="col-lg-6 content">
+                           <h2>Hakkimizda Merak Ettiginiz Hersey..</h2>
+                           <h3><p>Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır.</p></h3>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+            <section id='hizmetler' class='wow fadeInUp'>
+                  <div class='container'>
+               <div class="section-header">
+                  <h2>Hizmetlerimiz</h2>
+                  <p>Yılların vermiş olduğu tecrübe ile ürünleriniz güv yılların vermiş olduğu tecrübe ile ürünleriniz güv.</p>
+               </div>
+               <div class="row">
+                     <div class='col-lg-6'>
+                        <div class='box wow fadeInLeft'>
+                           <div class='icon'><i class='fa fa-picture-o'></i></div>
+                           <h4 class='title'><a href='#'>Baslik 1</a></h4>
+                           <p class='description'><p>Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir.</p></p>
+                        </div> 
+                     </div>
+                     <div class='col-lg-6'>
+                        <div class='box wow fadeInLeft'>
+                           <div class='icon'><i class='fa fa-map'></i></div>
+                           <h4 class='title'><a href='#'>Baslik 2</a></h4>
+                           <p class='description'>Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir.</p>
+                        </div> 
+                     </div>
+                     <div class='col-lg-6'>
+                        <div class='box wow fadeInLeft'>
+                           <div class='icon'><i class='fa fa-shopping-bag'></i></div>
+                           <h4 class='title'><a href='#'>Baslik 3</a></h4>
+                           <p class='description'>Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir.</p>
+                        </div> 
+                     </div>
+                     <div class='col-lg-6'>
+                        <div class='box wow fadeInLeft'>
+                           <div class='icon'><i class='fa fa-bar-chart'></i></div>
+                           <h4 class='title'><a href='#'>Baslik 4</a></h4>
+                           <p class='description'>Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. </p>
+                        </div> 
+                     </div></div></div></section><section id='referanslar' class='wow fadeInUp'>
+                  <div class='container'>
+               <div class='section-header'>
+                  <h2>Referanslar</h2>
+                  <p>referans_tr</p>
+               </div>
+               <div class='owl-carousel clients-carousel'>
+            <img src="http://localhost:8080/project/kurumsalsite/img/referans/ref1.png" alt="Referans-http://localhost:8080/project/kurumsalsite/1" /><img src="http://localhost:8080/project/kurumsalsite/img/referans/ref2.png" alt="Referans-http://localhost:8080/project/kurumsalsite/2" /><img src="http://localhost:8080/project/kurumsalsite/img/referans/ref3.png" alt="Referans-http://localhost:8080/project/kurumsalsite/3" /><img src="http://localhost:8080/project/kurumsalsite/img/referans/ref4.png" alt="Referans-http://localhost:8080/project/kurumsalsite/4" /><img src="http://localhost:8080/project/kurumsalsite/img/referans/ref5.png" alt="Referans-http://localhost:8080/project/kurumsalsite/5" /><img src="http://localhost:8080/project/kurumsalsite/img/referans/ref6.png" alt="Referans-http://localhost:8080/project/kurumsalsite/6" /><img src="http://localhost:8080/project/kurumsalsite/img/referans/ref7.png" alt="Referans-http://localhost:8080/project/kurumsalsite/7" /><img src="http://localhost:8080/project/kurumsalsite/img/referans/ref8.png" alt="Referans-http://localhost:8080/project/kurumsalsite/8" /></div></div></section>
+               <section id='filo' class='wow fadeInUp'>
+                  <div class='container'>
+                     <div class='section-header'>
+                        <h2>Filomuz</h2>
+                        <p>filo_tr</p>
+                     </div>
+                  </div>
+                  <div class='container-fluid'>
+                     <div class='row no-gutters'>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/1.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/1.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/1.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/2.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/2.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/2.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/3.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/3.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/3.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/4.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/4.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/4.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/5.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/5.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/5.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/6.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/6.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/6.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/7.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/7.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/7.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>  <div class='col-lg-3 col-md-4'>         
+                           <div class='filo-item wow fadeInUp'>            
+                              <a href='http://localhost:8080/project/kurumsalsite/img/filo/8.jpg' class='filo-popup'>
+                              <img src='http://localhost:8080/project/kurumsalsite/img/filo/8.jpg' alt='http://localhost:8080/project/kurumsalsite/img/filo/8.jpg' />
+                              <div class='filo-overlay'></div>
+                              </a>
+                           </div>
+                        </div>   </div>   
+                  </div>
+               </section><section id='yorumlar' class='wow fadeInUp'>
+                  <div class='container'>
+               <div class="section-header">
+                  <h2>Yorumlar</h2>
+                  <p>yorum_tr</p>
+               </div>
+               <div class="owl-carousel testimonials-carousel">
+            
+                  <div class="testimonial-item">
+                     <p>
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sol.png" class="quote-sign-left" />
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscing Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscing Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscing</p>
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sag.png" class="quote-sign-right" />
+                     </p>
+                     <img src="http://localhost:8080/project/kurumsalsite/img/yorum.jpg" class="testimonial-img" alt="" />
+                     <h3>Ahmet Hakan</h3>
+                  </div>
+               
+                  <div class="testimonial-item">
+                     <p>
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sol.png" class="quote-sign-left" />
+                        Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscing
+
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sag.png" class="quote-sign-right" />
+                     </p>
+                     <img src="http://localhost:8080/project/kurumsalsite/img/yorum.jpg" class="testimonial-img" alt="" />
+                     <h3>Semsi Inkaya</h3>
+                  </div>
+               
+                  <div class="testimonial-item">
+                     <p>
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sol.png" class="quote-sign-left" />
+                        Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscing
+
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sag.png" class="quote-sign-right" />
+                     </p>
+                     <img src="http://localhost:8080/project/kurumsalsite/img/yorum.jpg" class="testimonial-img" alt="" />
+                     <h3>Fehmi Uyar</h3>
+                  </div>
+               
+                  <div class="testimonial-item">
+                     <p>
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sol.png" class="quote-sign-left" />
+                        Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscing
+
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sag.png" class="quote-sign-right" />
+                     </p>
+                     <img src="http://localhost:8080/project/kurumsalsite/img/yorum.jpg" class="testimonial-img" alt="" />
+                     <h3>Timur Fernan</h3>
+                  </div>
+               
+                  <div class="testimonial-item">
+                     <p>
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sol.png" class="quote-sign-left" />
+                        Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscing
+
+                        <img src="http://localhost:8080/project/kurumsalsite/img/sag.png" class="quote-sign-right" />
+                     </p>
+                     <img src="http://localhost:8080/project/kurumsalsite/img/yorum.jpg" class="testimonial-img" alt="" />
+                     <h3>Garen Bulduk</h3>
+                  </div>
+               </div></div></section><section id='videolar' class='wow fadeInUp'>
+               <div class='container'>
+                  <div class='section-header'>
+                     <h2>Videolar</h2>
+                     <p>video_tr</p>
+                  </div>
+               </div>
+               <div class='container'>
+                  <div class='row no-gutters'>
+            
+                  <div class='col-lg-4 col-md-6 p-2'>
+                     <div class='embed-responsive embed-responsive-16by9'>
+                        <iframe class='embed-responsive-item' src='https://www.youtube.com/embed/A-JiXw4tiiM' allowfullscreen></iframe>
+                     </div>
+                  </div>
+               
+                  <div class='col-lg-4 col-md-6 p-2'>
+                     <div class='embed-responsive embed-responsive-16by9'>
+                        <iframe class='embed-responsive-item' src='https://www.youtube.com/embed/A-JiXw4tiiM' allowfullscreen></iframe>
+                     </div>
+                  </div>
+               
+                  <div class='col-lg-4 col-md-6 p-2'>
+                     <div class='embed-responsive embed-responsive-16by9'>
+                        <iframe class='embed-responsive-item' src='https://www.youtube.com/embed/cpjby8K70AM' allowfullscreen></iframe>
+                     </div>
+                  </div>
+               
+                  </div>   
+               </div>
+            </section><!-- BOLUMLER -->
+<!-- contact -->
+   <section id="iletisim" class="wow fadeInUp">
+      <div class="container">
+         <div class="section-header">
+            <h2>Iletisim</h2>
+            <p>iletisim_tr</p>
+   		</div>
+         
+         <div class="row contact-info">
+            <div class="col-md-4">
+               <div class="contact-address">
+                  <i class="ion-ios-location-outline"></i>
+                  <h3>Adresimiz</h3>
+                  <address>Verbug Ul. Sentenberg No: 22, Num: 33, Katowice/Polska</address>
+               </div>
+            </div>
+         
+            <div class="col-md-4">
+               <div class="contact-phone">
+                  <i class="ion-ios-telephone-outline"></i>
+                  <h3>Telefon Numaramiz</h3>
+                  <p><a href="tel:+48 888 999 777">+48 888 999 777</a></p>
+               </div>
+            </div>
+         
+            <div class="col-md-4">
+               <div class="contact-email">
+                  <i class="ion-ios-email-outline"></i>
+                  <h3>Mail Adresimiz</h3>
+                  <p><a href="mailto:udemy@mail.com">udemy@mail.com</a></p>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="container mb-4">
+         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d163403.6871703345!2d18.867108940569288!3d50.21380790393959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716ce2336a1ccd1%3A0xb9af2a350559fabb!2sKatovi%C3%A7e%2C%20Polonya!5e0!3m2!1str!2str!4v1595014661765!5m2!1str!2str" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+      </div>
+
+      <div class="container">
+         <div class="form">
+            <div id="mesajsonuc"></div>
+            <div id="formtutucu">
+               <form id="mailform">
+                  <div class="form-row">
+                     <div class="form-group col-md-6">
+                        <input type="text" name="isim" class="form-control" placeholder="Adiniz" required="required" />
+                     </div>
+                     <div class="form-group col-md-6">
+                        <input type="text" name="mail" class="form-control" placeholder="Mail Adresiniz" required="required" />
+                     </div>
+                  </div>
+
+                  <div class="form-row">
+                     <div class="form-group col-md-1">
+                        <img src="http://localhost:8080/project/kurumsalsite/captcha.php" />
+                     </div>
+                     <div class="form-group col-md-5">
+                        <input type="text" name="captcha" class="form-control" placeholder="Guvenlik Kodu" required="required" />
+                     </div>
+                     <div class="form-group col-md-6">
+                        <input type="text" name="konu" class="form-control" placeholder="Konu" required="required" />
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <textarea class="form-control" name="mesaj" placeholder="Mesajiniz" rows="5"></textarea>
+                  </div>
+
+                                    <input type="hidden" name="token" value="a4a3c33dbb6e9a3efd2384ba2dcd9b85" />
+                  <div class="text-center"><input type="button"  value="GONDER" id="gonderbtn" class="btn btn-info"/></div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </section>
+<!-- contact -->
+</main>
+<!-- main -->
+<!-- footer -->
+   <footer id="footer">
+      <div class="container">
+         <div class="row">
+            
+                <div class="col-md-6 mx-auto">
+                  <div class="row">
+                     <div id="bultensonuc" class="col-12 mt-5"></div>
+                     <div id="bultentutucu" class="col-12">
+                           <h4 class="pt-2 pb-2 border-bottom">Bultenimize Kayit Olun..</h4>
+                           <form id="bultenform">
+                           <input type="text" name="mail" id="mail" class="float-left w-75 form-control" placeholder="Mail Adresinizi Giriniz..">
+                           <input type="button"  value="GONDER" id="bultenbtn" class="float-right btn btn-info"/>
+                           </form>
+                     </div>
+                  </div>
+               </div>
+                        <div class="col-md-6 mx-auto">
+               <div class="row">
+                  <div class="col-12 mt-5">
+                     <div class="copyright pt-2">2020 © Copyright <strong>Udemy</strong></div>
+                     <div class="credits"> Aras Nakliyat TIC AS </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </footer>
+<!-- footer -->
+<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+</body>
+</html>
+
+<!-- $teknik->cacheStart(md5($_SERVER['REQUEST_URI']));//TEKNIK FUNCTION  -->
