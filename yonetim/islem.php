@@ -1,43 +1,69 @@
 <?php
-    include_once('../config/baglan.php');
-    include_once(YONETIM.'assets/functions.php');
-    $Yonetim = new Yonetim();
+	include_once("../config/baglan.php");
+	include_once(KOK_YONETIM."assets/fonksiyon.php");
+	
+	class ajaxpost extends yonetim {
+		function __construct(){
+			parent::__construct();
+		}
+	}
+
+	$ajaxs = new ajaxpost;
  
 // ajax isleleri
     switch($_GET['islem']):
-    /* dene */
-        case 'dene':
+        case 'tasarimguncelle'://tasatim guncelle
             if($_POST):
                 $bolum = $_POST['bolum'];
-                $tercih = $_POST['tercih'];
-
-                $tasarimupdate = $connect -> prepare("UPDATE tasarim SET $bolum='$tercih'");
-                $tasarimupdate -> execute();
-
+				$tercih = $_POST['tercih'];
+				
+				$ajaxs -> sorgum("UPDATE tasarim SET $bolum='$tercih'",0);	
             else:
-                echo 'Hata..';
+                header('Location:'.URL);
             endif;
-        break;
-    /* kullanici guncelle */
-        case 'kullaniciguncelle':
-            $hidden = $_POST['hidden'];
-            $name = htmlspecialchars($_POST['name']);
-            $authority = (int)htmlspecialchars($_POST['authority']);
+		break;
+		case 'sablonguncelle'://sablonguncelle
+			if($_POST):
+				$baslik = htmlspecialchars(strip_tags($_POST['baslik']));
+				$icerik = htmlspecialchars(strip_tags($_POST['icerik']));
+				$hidden = $_POST['hidden'];
 
-            $yonetim = $connect -> prepare("SHOW COLUMNS FROM yonetim WHERE FIELD NOT IN ('id','name','password','active','authority')");
-            $yonetim -> execute();
-            
-            foreach($yonetim as $yonet):
-                  ${$yonet[0]} = $Yonetim->checkboxcontrol(htmlspecialchars($yonet[0]));
-            endforeach;
-            
+				if($ajaxs -> sorgum("UPDATE mail_sablonlar SET baslik='$baslik',icerik='$icerik' WHERE id='$hidden'",3)):
+					echo 'ok';
+				else:
+					echo 'no';
+				endif;
+			else:
+				header('Location:'.URL);
+			endif;
+		break;
+		case 'sablonsil'://sablonsil
+			if($_POST):
+				$secilenid = $_POST['secilenid'];
 
-            $update = $connect -> prepare(
-                "UPDATE yonetim SET name='$name',authority='$authority',ayar='$ayar',siteayar='$siteayar',mailayar='$mailayar',bakim='$bakim',link='$link',
-                istatistik='$istatistik',yonetimm='$yonetimm',tasarim='$tasarim',intro='$intro',haber='$haber',hakkimizda='$hakkimizda',hizmet='$hizmet',
-                referans='$referans',filo='$filo',yorum='$yorum',video='$video',mesaj='$mesaj',bulten='$bulten' WHERE id='$hidden'");
-            $update -> execute(); 
-        break;
+				if($ajaxs -> sorgum("DELETE FROM mail_sablonlar WHERE id='$secilenid'",3)):
+					echo 'ok';
+				else:
+					echo 'no';
+				endif;
+			else:
+				header('Location:'.URL);
+			endif;
+		break;
+		case 'sablonekleme'://sablonsil
+			if($_POST):
+				$baslik = $_POST['baslik'];
+				$icerik = $_POST['icerik'];
+
+				if($ajaxs -> sorgum("INSERT INTO mail_sablonlar (baslik,icerik) VALUES ('$baslik','$icerik')",3)):
+					echo 'ok';
+				else:
+					echo 'no';
+				endif;
+			else:
+				header('Location:'.URL);
+			endif;
+		break;
     endswitch;
  
 ?>

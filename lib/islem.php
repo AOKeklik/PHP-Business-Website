@@ -1,52 +1,41 @@
 <?php
-   
-   try{
-      $connect = new PDO("mysql:host=localhost;dbname=kurumsal;charset=UTF8;", 'root', '');
-      $connect -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   }catch(PDOException $err){
-      die($err -> getMessage());
-   }
+		try{
+			$baglanti=new PDO("mysql:host=localhost;dbname=kurumsal;charset=utf8","root","");	
+			$baglanti->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);	
+		}catch(PDOException $e) {
+			die($e->getMessage());
+		}
 
-   
-   $islem = $_GET['islem'];
+		@$kareket = $_GET["islem"];
 
-   switch($islem):
-      case 'islembulten': 
-         $mail = htmlspecialchars(strip_tags($_POST['mail']));
+		switch ($kareket) :
+			case "bultenislem":
+				$gelenmail=htmlspecialchars(strip_tags($_POST["mail"]));
 
-         if(!$_POST):
-
-         else:
-            $sunucu = substr($mail, strpos($mail, '@') + 1);
-            $error = array();
-
-            getmxrr($sunucu, $error);
-
-            if(count($error) > 0):
-               $bulten = $connect -> prepare("SELECT COUNT(mail) FROM bulten WHERE mail='$mail'");
-               $bulten -> execute();
-               $bull = $bulten -> fetchColumn();
-
-               if($bull > 0):
-                  echo "<div class='alert alert-warning border border-danger'>Kayitli Mail..</div>";
-               else:
-                  $bulten = $connect -> prepare("INSERT INTO bulten (mail) VALUES ('$mail')");
-                  $bulten -> execute();
-
-                  echo "<div class='alert alert-info border border-warning'>Mail Kayit Edildi..</div>";
-               endif;
-            else:
-               echo "<div class='alert alert-warning border border-danger'>Gecerli Bir Mail Girin..</div>";
-            endif;
-         endif;
-      break;
-   endswitch;
-   
-   
-
-
-
-
+				if (!$_POST) :
+					echo "Posttan gelmiyorsun";
+				else:	
+					// girilen adresin gerçekten mail olup olmadığı
+					// boş olup olmaması
+					$sunucu=substr($gelenmail,strpos($gelenmail,'@')+1);
+					
+					//olcay@zumazuma.com
+					$error=array();
+					getmxrr($sunucu,$error);
+					
+					if (count($error) > 0):	
+						// diğer kontroller ve veritabanı ilemiş
+						//** gelen mailin daha önce kayıt edilip edilmediğini kontrol edebiliriz.
+						$kayiet=$baglanti->prepare("INSERT INTO bulten (mail) VALUES ('$gelenmail')");	
+						$kayiet->execute();		
+					
+						echo '<div class="alert alert-success mt-2">Başarıyla Kayıt Olundu.<br> Teşekkür ederiz.</div>';
+					else:
+						echo '<div class="alert alert-danger mt-2">Girilen Adres Geçersiz</div>';
+					endif;
+				endif;
+			break;
+		endswitch;
 
 
 

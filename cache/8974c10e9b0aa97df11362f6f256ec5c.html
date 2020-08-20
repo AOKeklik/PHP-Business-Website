@@ -1,0 +1,429 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <title>Udemy Nakliyat </title>
+  <meta name="title" content="Udemy Nakliyat" />
+  <meta name="description" content="Uluslar arası nakliyat" />
+  <meta name="keywords" content="nakliyat, taşıma, kamyon" />
+  <meta name="author" content="Udemy Nakliyat TİC" />
+  <meta name="owner" content="Udemy Nakliyat TİC" />
+  <meta name="copyright" content="2019" />
+ <!-- Kütüphaneler -->
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/jquery/jquery.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/jquery/jquery-migrate.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/easing/easing.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/superfish/hoverIntent.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/superfish/superfish.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/wow/wow.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/magnific-popup/magnific-popup.min.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/sticky/sticky.js"></script>
+  <script src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/js/main.js"></script>
+  <script type="text/javascript" src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/js/jquery.js"></script>
+  <script type="text/javascript" src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/js/jquery.vticker-min.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      $('#news-container1').vTicker({
+        speed: 700,
+        pause: 4000,
+        animation: 'fade',
+        mousePause: false,
+        showItems: 1
+      });
+    });
+  </script>
+<!-- Fontlar -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800|Montserrat:300,400,700" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/icon/favicon.png">
+<!-- Bootstrap stil dosyası -->
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- işimize yarayacak diğer kütüphane css dosyalarımız -->
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/magnific-popup/magnific-popup.css" rel="stylesheet">
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+<!-- bizim stil dosyamız -->
+  <link href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/css/style.css" rel="stylesheet">
+  <script>
+    $(document).ready(function(e) {
+	    $('#bultensonuc').hide();
+      
+      $("#gonderbtn").click(function(){ 
+          var error=false;
+          var form=$("#mailform").find('.form-group');
+    
+          form.children('input').each(function(){ 
+              var i=$(this);
+              i.css("border-color","");
+      
+              if (i.val()=="") {
+                  i.css("border-color","red");
+                  $('#mesajsonuc').text("Lütfen tüm alanları doldurun.");
+                  error=true;
+              }else{	
+                  error=false;
+                  $('#mesajsonuc').text("");
+              }	
+          })
+          
+          if (form.children('textarea').val()==""){
+              form.children('textarea').css("border-color","red");
+              $('#mesajsonuc').text("Lütfen tüm alanları doldurun.");
+              error=true;
+          }else{	
+              error=false;
+              $('#mesajsonuc').text("");
+          }
+
+          if(!error){		
+              $.ajax({
+                  type:"POST",
+                  url:'http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/mail/gonder.php',
+                  data:$('#mailform').serialize(),
+                  success: function(donen){
+                      $('#mailform').trigger("reset"); 
+                      $('#formtutucu').fadeOut(500);
+                      $('#mesajsonuc').html(donen);
+                  }
+		          })
+		      }
+	    })
+   
+      $("#bultenbtn").click(function(){ 
+          $.ajax({
+              type:"POST",
+              url:'http://localhost:8080/PROJELER/kurumsalsite/OnePageT/lib/islem.php?islem=bultenislem',
+              data:$('#bultenform').serialize(),
+              success: function(donen){
+                  $('#bultenform').trigger("reset"); 
+                  $('#bultentutucu').fadeOut();
+                  $('#bultensonuc').html(donen).fadeIn();
+              }
+          })
+      })
+    })
+  </script>
+</head>
+<body id="body">
+<!-- ÜST BAR -->
+<section id="topbar" class="d-none d-lg-block">
+  <div class="container clearfix">
+    <div class="contact-info float-left">
+      <i class="fa fa-envelope-o"></i><a href="mailto:info@udemynakliyat.com">info@udemynakliyat.com</a>
+      <i class="fa fa-phone"></i>+90 212 111 11 11     
+    </div>    
+    <div class="social-links float-right">    
+      <a href="http://localhost:8080/PROJELER/kurumsalsite/twit" class="twitter"><i class="fa fa-twitter"></i></a>
+      <a href="http://localhost:8080/PROJELER/kurumsalsite/face" class="facebook"><i class="fa fa-facebook"></i></a>
+      <a href="http://localhost:8080/PROJELER/kurumsalsite/inst" class="instagram"><i class="fa fa-instagram"></i></a> 
+      <a href="tr" class="twitter">TR</a>
+      <a href="en" class="twitter">EN</a>
+    </div>
+  </div>
+</section> 
+<!-- header -->
+<header id="header">
+  <div class="container">
+    <div id="logo" class="pull-left">
+      <h1><a href="#body" class="scrollto">Udemy Nakliyat</h1>
+    </div>
+    <nav id="nav-menu-container">
+      <ul class="nav-menu"> 
+        <li class="menu-active"><a href="#body">Anasayfa</a></li><li><a href="#hakkimizda">Hakkımızda</a></li><li><a href="#hizmetler">Hizmetlerimiz</a></li><li><a href="#filo">Araç Filomuz</a></li><li><a href="#videolar">Videolar</a></li><li><a href="#iletisim">iletişim</a></li>  
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- İNTRO -->
+<section id="intro">
+  <div class="intro-content">
+    <h2>Nakliyatta Güven</h2>
+  </div>
+  <div id="intro-carousel" class="owl-carousel">
+    <div class="item" style="background-image:url(http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/carousel/2.jpg);"></div><div class="item" style="background-image:url(http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/carousel/3.jpg);"></div><div class="item" style="background-image:url(http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/carousel/4.jpg);"></div> 
+  </div>
+</section>
+<!-- MAIN -->
+<main id="main">
+  <!-- HABERLER -->
+	<div class="container wow fadeInUp">
+				<div class="row mt-2  pt-3  border-secondary  border-bottom" >
+					<div class="col-lg-3 col-md-3 text-right "><h5 >BİZDEN HABERLER :</h5></div>
+					<div class="col-lg-9 col-md-9 text-info text-left" id="news-container1">
+						<ul style="list-style-type:none;"><li>Türkçe Haber verim-1 | 2019-05-02 15:55:33</li><li>Türkçe Haber verim-2 | 2019-05-02 15:57:08</li><li>Türkçe Haber verim-3 | 2019-05-02 15:57:16</li></ul>
+					</div>
+				</div>
+			</div>    
+  <!-- HABERLER -->
+  <!-- TÜM BÖLÜMLER -->
+	<section id="hakkimizda" class="wow fadeInUp">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-6 hakkimizda-img">
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/hakkimiz.jpg"  alt="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/hakkimiz.jpg-Hakkında"/>
+						</div>
+						<div class="col-lg-6 content">
+							<h2>Yeni hakkımızda başlık</h2>
+							<h3><p>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. Kökleri M.Ö. 45 <strong>tarihinden</strong> bu yana klasik Latin edebiyatına<strong> kadar</strong> uzanan 2000 <i>yıllık</i> bir geçmişi vardır. Virginiadaki Hampden-Sydney Collegedan Latince profesörü Richard McClintock, bir Lorem Ipsum pasajında geçen ve anlaşılması en güç sözcüklerden biri olan Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. Kökleri M.Ö. 45 tarihinden bu yana klasik Latin edebiyatına kadar uzanan 2000 yıllık bir geçmişi vardır. Virginiadaki Hampden-Sydney Collegedan Latince profesörü Richard McClintock, bir Lorem Ipsum pasajında geçen ve anlaşılması en güç sözcüklerden biri olan</p></h3>
+						</div>
+					</div>
+				</div>
+			</section><section id="hizmetler">
+					<div class="container"><div class="section-header">
+				<h2>HİZMETLERİMİZ </h2>
+				<p>Yılların vermiş olduğu tecrübe ile ürünleriniz güvenle taşıyoruz. </p>
+			</div>
+			<div class="row"><div class="col-lg-6">
+					<div class="box wow fadeInTop">
+						<div class="icon"><i class="fa fa-certificate"></i></div>
+							<h4 class="title"><a href="#">İthalat</a></h4>
+							<p class="description"><p>Ürünlerini,<strong> güvenle</strong> istenilen limandan alarak istenilen limana teslim ediyoruz.</p></p>
+						</div>  
+					</div><div class="col-lg-6">
+					<div class="box wow fadeInTop">
+						<div class="icon"><i class="fa fa-certificate"></i></div>
+							<h4 class="title"><a href="#">İhracat</a></h4>
+							<p class="description">Ürünlerini, güvenle istenilen limandan alarak istenilen limana teslim ediyoruz.</p>
+						</div>  
+					</div><div class="col-lg-6">
+					<div class="box wow fadeInTop">
+						<div class="icon"><i class="fa fa-certificate"></i></div>
+							<h4 class="title"><a href="#">Depoloma</a></h4>
+							<p class="description"><p>Ürünlerinizi depolarımızda güvenle saklıyoruz.</p></p>
+						</div>  
+					</div><div class="col-lg-6">
+					<div class="box wow fadeInTop">
+						<div class="icon"><i class="fa fa-certificate"></i></div>
+							<h4 class="title"><a href="#">Çok hızlıyız</a></h4>
+							<p class="description">Gerçekten epey hızlıyız, sorunsuz taşırız ne var ne yok.</p>
+						</div>  
+					</div></div></div></section><section id="referanslar" class="wow fadeInUp">
+					<div class="container"><div class="section-header">
+				<h2>REFERANSLAR </h2>
+				<p>Burada Refeans bölümünün başlığı olacak </p>
+			</div>
+			<div class="owl-carousel clients-carousel"><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref1.png" alt="Referans-1" /><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref2.png" alt="Referans-2" /><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref3.png" alt="Referans-3" /><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref4.png" alt="Referans-4" /><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref5.png" alt="Referans-5" /><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref6.png" alt="Referans-6" /><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref7.png" alt="Referans-7" /><img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/referans/ref8.png" alt="Referans-8" /></div></div></section><section id="filo" class="wow fadeInUp">
+				<div class="container">
+					<div class="section-header">
+						<h2>ARAÇLARIMIZ </h2>
+						<p>Burada Araçlarımız bölümünün başlığı olacak </p>
+					</div>
+				</div>
+				<div class="container-fluid">
+					<div class="row no-gutters"><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/1.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/1.jpg" alt="Referans-1" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/2.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/2.jpg" alt="Referans-2" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/3.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/3.jpg" alt="Referans-3" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/4.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/4.jpg" alt="Referans-4" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/5.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/5.jpg" alt="Referans-5" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/6.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/6.jpg" alt="Referans-6" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/7.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/7.jpg" alt="Referans-7" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div><div class="col-lg-3 col-md-4">         
+								<div class="filo-item wow fadeInUp">            
+									<a href="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/8.jpg" class="filo-popup">
+										<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/filo/8.jpg" alt="Referans-8" />
+										<div class="filo-overlay"></div>
+									</a>
+								</div>
+							</div></div></div></section><section id="videolar" class="wow fadeInUp"><div class="container">
+				<div class="section-header">
+					<h2>VİDEOLARIMIZ</h2>
+					<p>Şirketimize ait videolar</p>
+				</div>	
+			</div>
+			<div class="container">
+				<div class="row no-gutters"><div class="col-lg-4 col-md-4 p-1"> 
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/L3wKzyIN1yk" allowfullscreen></iframe> 
+							</div>
+						</div><div class="col-lg-4 col-md-4 p-1"> 
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/pHAQA8FJP3c" allowfullscreen></iframe> 
+							</div>
+						</div></div></div></section><section id="yorumlar" class="wow fadeInUp">
+					<div class="container"><div class="section-header">
+				<h2>MÜŞTERİ YORUMLARI </h2>
+				<p>Burada Müşteri yorumları bölümünün başlığı olacak </p>
+			</div>
+			<div class="owl-carousel testimonials-carousel"><div class="testimonial-item">
+						<p>
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sol.png" class="quote-sign-left" />
+							Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sag.png" class="quote-sign-right" />
+						</p>
+						<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/yorum.jpg" class="testimonial-img" alt="Müşteri Yorum-1" />
+						<h3>Mahmut</h3>
+					</div><div class="testimonial-item">
+						<p>
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sol.png" class="quote-sign-left" />
+							Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sag.png" class="quote-sign-right" />
+						</p>
+						<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/yorum.jpg" class="testimonial-img" alt="Müşteri Yorum-2" />
+						<h3>Terlik LTD.ŞTİ.</h3>
+					</div><div class="testimonial-item">
+						<p>
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sol.png" class="quote-sign-left" />
+							Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sag.png" class="quote-sign-right" />
+						</p>
+						<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/yorum.jpg" class="testimonial-img" alt="Müşteri Yorum-3" />
+						<h3>ahmet</h3>
+					</div><div class="testimonial-item">
+						<p>
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sol.png" class="quote-sign-left" />
+							Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size Ürünlerimizi çok iyi taşıdınız aferin size
+							<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/sag.png" class="quote-sign-right" />
+						</p>
+						<img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/img/yorum.jpg" class="testimonial-img" alt="Müşteri Yorum-4" />
+						<h3>Hüseyin</h3>
+					</div></div></div></section> 
+  <!-- TÜM BÖLÜMLER -->
+  <!-- ILETISIM -->
+  <section id="iletisim" class="wow fadeInUp">
+    <div class="container">
+      <div class="section-header">
+        <h2>İLETİŞİM  </h2>
+        <p>Burada iletişim bölümünün başlığı olacak </p>
+   		</div>
+      <div class="row contact-info">
+        <div class="col-md-4">
+          <div class="contact-address">
+            <i class="ion-ios-location-outline"></i>
+            <h3>ADRESİMİZ</h3>
+            <address>Evren mah. dünya sok.yer kabuğu apt. no:1 Beylikdüzü</address>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="contact-phone">
+            <i class="ion-ios-telephone-outline"></i>
+            <h3>TELEFON NUMARAMIZ</h3>
+            <p><a href="tel:+90 212 111 11 11">+90 212 111 11 11</a></p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="contact-email">
+            <i class="ion-ios-email-outline"></i>
+            <h3>Mail</h3>
+            <p><a href="mailto:info@udemynakliyat.com">info@udemynakliyat.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mb-4">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48187.25741308118!2d28.611613590057516!3d40.98797099143595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b55fc19deb0b3b%3A0xdf4ea093f30983c6!2zQmV5bGlrZMO8esO8L8Swc3RhbmJ1bA!5e0!3m2!1str!2str!4v1545739036216" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+    <div class="container">
+      <div class="form">  
+        <div id="mesajsonuc"></div>
+        <div id="formtutucu">
+          <form id="mailform">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                  <input type="text" name="isim" class="form-control" placeholder="Adınız" required="required" />
+              </div>
+              <div class="form-group col-md-6">
+                <input type="text" name="mail" class="form-control" placeholder="Mail Adresiniz" required="required" />
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" name="konu" class="form-control" placeholder="Mesaj Konusu" required="required" />
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" name="mesaj" rows="5"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <img src="http://localhost:8080/PROJELER/kurumsalsite/OnePageT/captcha.php" /> 
+                  </div>
+                  <div class="form-group col-md-9">
+                    <input type="text" name="guvenlik" class="form-control" placeholder="Güvenlik kodunu girin" required="required" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6"><input type="hidden" name="token" value="4b1df46e33a3ebaee47dd4c4671fd3e0" />
+                <input type="button"  value="Gönder" id="gonderbtn" class="btn btn-info"/>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- MAIN -->
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+   	    <div id="bultentutucu">
+					<div class="col-lg-12"><h4 class="pt-2 border-bottom">Bültenimize Kayıt Olun</h4></div><form id="bultenform">
+						<div class="row">
+							<div class="col-lg-6"><input type="text" name="mail" class="form-control" placeholder="Mail Adresi" required="required" /></div>
+							<div class="col-lg-6"><input type="button" name="btn" id="bultenbtn" value="KAYIT OL" class="btn btn-info" /></form></div>
+						</div>
+					</div>  
+					<div id="bultensonuc"></div>      </div>
+      <div class="col-lg-4">
+        <div class="copyright">
+          2019 © Copyright Udemy        </div>
+        <div class="credits">
+          Udemy Nakliyat TİC        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+</body>
+</html>
+

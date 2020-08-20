@@ -1,102 +1,81 @@
-<?php
-   session_start();
-   
-   use PHPMailer\PHPMailer\PHPMailer;
-   use PHPMailer\PHPMailer\Exception;
+<?php 
+	session_start();
+	include_once("../../config/baglan.php");
+	include_once(KOK."lib/mailkontrol.php");
+	$mailsinifim= new mailkontrol();
+	//---- TERCİHİ ALIYORUM
+	switch ($_GET["islem"]):
+		case "arayuz";
+			if($_POST):	
+				$isim=htmlspecialchars(strip_tags($_POST["isim"]));
+				$mailadres=htmlspecialchars(strip_tags($_POST["mail"]));
+				$konu=htmlspecialchars(strip_tags($_POST["konu"]));
+				$mesaj=htmlspecialchars(strip_tags($_POST["mesaj"]));
+				$guvenlik=htmlspecialchars(strip_tags($_POST["guvenlik"]));
+				$token=htmlspecialchars(strip_tags($_POST["token"]));
+			
+			
+				if ($token != $_SESSION["token"]):
+					echo '<div class="alert alert-danger text-center mx-auto">SİSTEMSEL HATA</div>';
+				elseif($guvenlik != $_SESSION["kod"]):
+					echo '<div class="alert alert-danger text-center mx-auto">Güvenlik kodunu yanlış girdiniz</div>';
+				else:
+					unset($_SESSION["token"]);
+			
+					$zaman=date("d.m.Y")."/".date("H:i");
+					$tercihgeldi = $mailsinifim -> sorgum("select mesajtercih from ayarlar",1);
+			
+					switch($tercihgeldi["mesajtercih"]):
+						case 1:			
+							if($mailsinifim->mailgonder(NULL,$konu,$mesaj,array("mailadresi" =>$mailadres,"ad" =>$isim))):
+								echo '<div class="alert alert-success text-center mx-auto">Mesaj başarıyla alındı.<br>TEŞEKKÜR EDERİZ</div>';
+							else:
+								echo '<div class="alert alert-danger text-center mx-auto">Mail gönderilemedi.<br>DAHA SONRA TEKRAR DENEYİNİZ</div>';	
+							endif;
+						break;
+						case 2:
+							$mailsinifim->mailgonder(NULL,$konu,$mesaj,array("mailadresi" =>$mailadres,"ad" =>$isim));
+							$mailsinifim->Eklemesorgum("gelenmail", array("ad","mailadres","konu","mesaj","zaman"),array($isim,$mailadres,$konu,$mesaj,$zaman));
 
-   require "src/Exception.php";
-   require "src/PHPMailer.php";
-   require "src/SMTP.php";
+							echo '<div class="alert alert-success text-center mx-auto">Mesaj başarıyla alındı.<br>TEŞEKKÜR EDERİZ</div>';		
+						break;
+						case 3:
+							$mailsinifim->Eklemesorgum("gelenmail",array("ad","mailadres","konu","mesaj","zaman"),array($isim,$mailadres,$konu,$mesaj,$zaman));
 
-      $connect = new PDO("mysql:host=localhost;dbname=kurumsal;charset=UTF8;",'root','');
+							echo '<div class="alert alert-success text-center mx-auto">Mesaj başarıyla alındı.<br>TEŞEKKÜR EDERİZ</div>';		
+						break;
+					endswitch;
+				endif;
+			endif;
+		break;
+		case "panel":
+				$mailler=$_POST["mailler"];
+				$mailbaslik=$_POST["mailler"];
+				$mailicerik=$_POST["mail"];
+				
+				$sonmailler= explode("\r",$mailler);
+				
+				if (count($sonmailler)>1):
+					if (in_array(null,$sonmailler) || in_array('',array_map('trim',$sonmailler))):
+						array_pop($sonmailler);			
+					endif;	
+				endif;
+			
+				if($mailsinifim->mailgonder($sonmailler,$mailbaslik,$mailicerik,NULL)):
+					echo "ok";
+				else:
+					echo "hata";
+				endif;
+		break;
+	endswitch;
 
-      $gelenmailayar = $connect -> prepare("SELECT * FROM gelenmailayar");
-      $gelenmailayar -> execute();
-      $gelenmail = $gelenmailayar -> fetch(PDO::FETCH_ASSOC);
 
-      $ayarlar = $connect -> prepare("SELECT mailtercih FROM ayarlar");
-      $ayarlar -> execute();
-      $ayar = $ayarlar -> fetch(PDO::FETCH_ASSOC);
 
-      $mail = new PHPMailer(true);
-      $mail->SMTPDebug = 0;
-      $mail->isSMTP();
-      $mail->CharSet = 'UTF-8';
-      $mail->Host = $gelenmail['host'];
-      $mail->SMTPAuth = true;
-      $mail->Username = $gelenmail['mail'];
-      $mail->Password = $gelenmail['password'];
-      $mail->SMTPSecure = 'tls';
-      $mail->Port = $gelenmail['port'];
-      $mail->isHTML(true);
-      $mail->addAddress($gelenmail['receiver']);
 
-      if($_POST):
-         $isim = htmlspecialchars(strip_tags($_POST['isim']));
-         $mails = htmlspecialchars(strip_tags($_POST['mail']));
-         $konu = htmlspecialchars(strip_tags($_POST['konu']));
-         $captcha = htmlspecialchars(strip_tags($_POST['captcha']));
-         $mesaj = htmlspecialchars(strip_tags($_POST['mesaj']));
-         $token = htmlspecialchars(strip_tags($_POST['token']));
-         $date = date("m-d-Y H:i:s");
 
-         if($token != $_SESSION['token']):
-            echo "<div class='alert alert-danger text-center mx-auto'><b>MESAJ</b> -- {$token} -- {$_SESSION['token']} -- Sistem Hatasi... </div>";
-         else:
-            if($captcha != $_SESSION['codes']):
-               echo "<div class='alert alert-danger text-center mx-auto'><b>MESAJ</b> Guvenlik Kodu Hatali... </div>";
-            else:
-               switch($ayar['mailtercih']):
-                  case 1: 
-                     $mail->setFrom($mails,$isim); 
-                     $mail->addReplyTo($mails,'yanitlaisim');
-                     $mail->Subject = $konu;
-                     $mail->Body = $mesaj;
 
-                     if($mail->send()):
-                        echo "<div class='alert alert-success text-center mx-auto'><b>MESAJ</b> Basariyla Gonderildi... </div>";
-                     else:
-                        $gelenmail = $connect -> prepare("INSERT INTO gelenmail (name,mail,subject,message,data) VALUES (?,?,?,?,?)");
-                        $gelenmail -> bindParam(1, $isim, PDO::PARAM_STR);
-                        $gelenmail -> bindParam(2, $mails, PDO::PARAM_STR);
-                        $gelenmail -> bindParam(3, $konu, PDO::PARAM_STR);
-                        $gelenmail -> bindParam(4, $mesaj, PDO::PARAM_STR);
-                        $gelenmail -> bindParam(5, $date, PDO::PARAM_STR);
-                        $gelenmail -> execute();
 
-                        echo "<div class='alert alert-success text-center mx-auto'><b>MESAJ</b> Kaydedildi.. </div>";
-                     endif;
-                  break;
-                  case 2: 
-                     $mail->setFrom($mails,$isim); 
-                     $mail->addReplyTo($mails,'yanitlaisim');
-                     $mail->Subject = $konu;
-                     $mail->Body = $mesaj;
-                     $mail->send();
 
-                     $gelenmail = $connect -> prepare("INSERT INTO gelenmail (name,mail,subject,message,data) VALUES (?,?,?,?,?)");
-                     $gelenmail -> bindParam(1, $isim, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(2, $mails, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(3, $konu, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(4, $mesaj, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(5, $date, PDO::PARAM_STR);
-                     $gelenmail -> execute();
 
-                     echo "<div class='alert alert-success text-center mx-auto'><b>MESAJ</b> Gonderildi Ve Kaydedildi.. 2</div>";
-                  break; 
-                  case 3: 
-                     $gelenmail = $connect -> prepare("INSERT INTO gelenmail (name,mail,subject,message,data) VALUES (?,?,?,?,?)");
-                     $gelenmail -> bindParam(1, $isim, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(2, $mails, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(3, $konu, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(4, $mesaj, PDO::PARAM_STR);
-                     $gelenmail -> bindParam(5, $date, PDO::PARAM_STR);
-                     $gelenmail -> execute();
 
-                     echo "<div class='alert alert-success text-center mx-auto'><b>MESAJ</b> Kaydedildi 3..</div>";
-                  break; 
-               endswitch;
-            endif;
-         endif;
-      endif;
 ?>

@@ -2,39 +2,39 @@
 (function($) {
     "use strict";
 
-/*================================
+    /*================================
     Preloader
-==================================*/
+    ==================================*/
 
     var preloader = $('#preloader');
     $(window).on('load', function() {
         preloader.fadeOut('slow', function() { $(this).remove(); });
     });
 
-/*================================
+    /*================================
     sidebar collapsing
-==================================*/
+    ==================================*/
     $('.nav-btn').on('click', function() {
         $('.page-container').toggleClass('sbar_collapsed');
     });
 
-/*================================
+    /*================================
     Start Footer resizer
-==================================*/
+    ==================================*/
     var e = function() {
         var e = (window.innerHeight > 0 ? window.innerHeight : this.screen.height) - 5;
         (e -= 67) < 1 && (e = 1), e > 67 && $(".main-content").css("min-height", e + "px")
     };
     $(window).ready(e), $(window).on("resize", e);
 
-/*================================
+    /*================================
     sidebar menu
-==================================*/
+    ==================================*/
     $("#menu").metisMenu();
 
-/*================================
+    /*================================
     slimscroll activation
-==================================*/
+    ==================================*/
     $('.menu-inner').slimScroll({
         height: 'auto'
     });
@@ -51,9 +51,9 @@
         height: 'calc(100vh - 158px)'
     });
 
-/*================================
+    /*================================
     stickey Header
-==================================*/
+    ==================================*/
     $(window).on('scroll', function() {
         var scroll = $(window).scrollTop(),
             mainHeader = $('#sticky-header'),
@@ -67,9 +67,9 @@
         }
     });
 
-/*================================
+    /*================================
     form bootstrap validation
-==================================*/
+    ==================================*/
     $('[data-toggle="popover"]').popover()
 
     /*------------- Start form Validation -------------*/
@@ -88,9 +88,9 @@
         });
     }, false);
 
-/*================================
+    /*================================
     datatable active
-==================================*/
+    ==================================*/
     if ($('#dataTable').length) {
         $('#dataTable').DataTable({
             responsive: true
@@ -108,16 +108,16 @@
     }
 
 
-/*================================
+    /*================================
     Slicknav mobile menu
-==================================*/
+    ==================================*/
     $('ul#nav_menu').slicknav({
         prependTo: "#mobile_menu"
     });
 
-/*================================
+    /*================================
     login form
-==================================*/
+    ==================================*/
     $('.form-gp input').on('focus', function() {
         $(this).parent('.form-gp').addClass('focused');
     });
@@ -127,17 +127,17 @@
         }
     });
 
-/*================================
+    /*================================
     slider-area background setting
-==================================*/
+    ==================================*/
     $('.settings-btn, .offset-close').on('click', function() {
         $('.offset-area').toggleClass('show_hide');
         $('.settings-btn').toggleClass('active');
     });
 
-/*================================
+    /*================================
     Owl Carousel
-==================================*/
+    ==================================*/
     function slider_area() {
         var owl = $('.testimonial-carousel').owlCarousel({
             margin: 50,
@@ -169,9 +169,9 @@
     }
     slider_area();
 
-/*================================
+    /*================================
     Fullscreen Page
-==================================*/
+    ==================================*/
 
     if ($('#full-view').length) {
 
@@ -219,65 +219,44 @@
         });
     }
 
-/*================================
-    tasarim guncelle
-==================================*/
+    /*================================
+    TASARIM
+    ==================================*/
+
     $('#tasarim input[type=radio]').change(function(){
 
         var bolum = $(this).attr('data-value')
         var tercih = this.value;
 
         var statu = tercih == 0 ? 'Active' : 'Passive'; 
+        var messages = '';
+        switch(bolum){
+            case 'hiztercih': messages = 'HIZMETLER BOLUMU'; break;
+            case 'reftercih': messages = 'REFERANSLAR BOLUMU'; break;
+            case 'yorumtercih': messages = 'YORUMLAR BOLUMU'; break;
+            case 'videotercih': messages = 'VIDEOLAR BOLUMU'; break;
+            case 'bultentercih': messages = 'BULTEN BOLUMU'; break;
+            case 'habertercih': messages = 'HABER BOLUMU'; break;
+        }
 
-        $.post("http://localhost:8080/project/kurumsalsite/yonetim/islem.php?islem=dene",{
+        $.post("http://localhost:8080/PROJELER/kurumsalsite/OnePageT/yonetim/islem.php?islem=tasarimguncelle",{
             "bolum":bolum,"tercih":tercih
         },function(results){
             if(results === false){
                 $.notify(
-                    `${bolum.toUpperCase()} Hata Olustu..`, 
-                    {   position:"bottom right",
-                        className: 'error',
-                    }
+                    `${messages} Hata Olustu..`, 
+                    {position:"bottom right", className: 'error'}
                 );
             }else{
                 $.notify(
-                    `${bolum.toUpperCase()} Basariyla ${statu.toUpperCase()} Edildi..`,
-                    { position:"bottom right",
-                        className: 'success',
-                    }
+                    `${messages} Basariyla ${statu.toUpperCase()} Edildi..`,
+                    {position:"bottom right", className: 'success'}
                 );
             }
         }) 
     })
-/*================================
-    kullanici guncelle
-==================================*/
-    $('#btnkullaniciguncelle').click(function(e){
-        var text = $('#formkullaniciguncelle #name')
 
-        if(text.val() == ''){
-            $.notify(
-                `Lutfen Tum Alanlari Doldurunuz..`, 
-                {   position:"bottom right",
-                    className: 'error',
-                }
-            );
-        }else{
-            $.ajax({
-                type: 'POST',
-                url : 'http://localhost:8080/project/kurumsalsite/yonetim/islem.php?islem=kullaniciguncelle',
-                data: $('#formkullaniciguncelle').serialize(),
-                success: function(results){
-                    $.notify(
-                        `${text.val().toUpperCase()} Adli Kullanici Guncellendi..`, 
-                        {   position:"bottom right",
-                            className: 'success',
-                        }
-                    );
-                }
-            })
-        }
-        e.preventDefault()
-    })
+
+
 
 })(jQuery);
